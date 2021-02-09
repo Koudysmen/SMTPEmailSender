@@ -19,6 +19,6 @@ namespace SMTPEmailSender.Model
         [Required(ErrorMessage ="Password cannot be null")]
         public string Password { get; set; }
 
-        public bool UseSSL { get; set; } = true;
+        public bool UseSsl { get; set; } = true;
     }
 }

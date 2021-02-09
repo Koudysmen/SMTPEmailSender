@@ -11,10 +11,15 @@ namespace SMTPEmailSender.Model
         public string Subject { get; set; }
 
         [Required(ErrorMessage = "{0} cannot be null")]
+        [EmailAddress]
         public string Reciever { get; set; }
 
         [Required(ErrorMessage = "{0} cannot be null")]
+        [EmailAddress]
         public string Sender { get; set; }
+
+        [Required(ErrorMessage = "{0} cannot be null")]
+        public string MailBoxName { get; set; }
 
         [Required(ErrorMessage = "{0} cannot be null")]
         public string HtmlTemplateNameWithoutExtension { get; set; }

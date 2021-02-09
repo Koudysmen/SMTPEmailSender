@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SMTPEmailSender.Services;
 
 namespace WebApi.Services.EmailClient
 {
-    internal class MustacheReplacement
+    public class MustacheReplacement : IMustacheReplacement
     {
-        
         public string ReplaceVariablesInTemplate(IDictionary<string, string> values, string templatePath)
         {
             var stubble = new StubbleBuilder().Build();
