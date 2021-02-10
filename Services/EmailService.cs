@@ -28,9 +28,9 @@ namespace WebApi.Services
             this.emailBodyBuilder = emailBodyBuilder;
         }
 
-        public async Task SendMessage(EmailContent emailContent, IDictionary<string, string> values)
+        public async Task SendMessageAsync(EmailSettings emailSettings, IDictionary<string, string> values)
         {
-            var message = this.emailBodyBuilder.CreateBodyAccordingEmailType(emailContent, values);
+            var message = this.emailBodyBuilder.CreateBodyAccordingEmailType(emailSettings, values);
 
             using var smtpClient = new SmtpClient();
             await smtpClient.ConnectAsync(smtpHost, port, useSsl);

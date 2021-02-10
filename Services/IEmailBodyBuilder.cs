@@ -8,6 +8,6 @@ namespace SMTPEmailSender.Services
 {
     public interface IEmailBodyBuilder
     {
-        MimeMessage CreateBodyAccordingEmailType(EmailContent emailContent, IDictionary<string, string> values);
+        MimeMessage CreateBodyAccordingEmailType(EmailSettings emailSettings, IDictionary<string, string> values);
     }
 }

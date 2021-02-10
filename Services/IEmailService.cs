@@ -6,6 +6,6 @@ namespace WebApi.Services
 {
     public interface IEmailService
     {
-        Task SendMessage(EmailContent emailContent, IDictionary<string, string> customProperties);
+        Task SendMessageAsync(EmailSettings emailSettings, IDictionary<string, string> customProperties);
     }
 }

@@ -21,24 +21,24 @@ namespace WebApi.Services
         }
 
 
-        public MimeMessage CreateBodyAccordingEmailType(EmailContent emailContent, IDictionary<string, string> values)
+        public MimeMessage CreateBodyAccordingEmailType(EmailSettings emailSettings, IDictionary<string, string> values)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(emailContent.MailBoxName, emailContent.Sender));
-            message.To.Add(new MailboxAddress(emailContent.MailBoxName, emailContent.Reciever));
-            message.Subject = emailContent.Subject;
+            message.From.Add(new MailboxAddress(emailSettings.MailBoxName, emailSettings.Sender));
+            message.To.Add(new MailboxAddress(emailSettings.MailBoxName, emailSettings.Reciever));
+            message.Subject = emailSettings.Subject;
             var builder = new BodyBuilder();
 
-            var findEmailTemplate = this.ExistTemplate(emailContent.PathToFolderWhereTemplateAre,
-                emailContent.HtmlTemplateNameWithoutExtension);
+            var findEmailTemplate = this.ExistTemplate(emailSettings.PathToFolderWhereTemplateAre,
+                emailSettings.HtmlTemplateNameWithoutExtension);
 
             if(!findEmailTemplate)
             {
                 throw new KeyNotFoundException
-                    ($"Template '{emailContent.HtmlTemplateNameWithoutExtension}' not found in path {emailContent.PathToFolderWhereTemplateAre}");
+                    ($"Template '{emailSettings.HtmlTemplateNameWithoutExtension}' not found in path {emailSettings.PathToFolderWhereTemplateAre}");
             }
 
-            string path = this.CreateAbsoluteTemplatePath(emailContent.PathToFolderWhereTemplateAre, emailContent.HtmlTemplateNameWithoutExtension);
+            string path = this.CreateAbsoluteTemplatePath(emailSettings.PathToFolderWhereTemplateAre, emailSettings.HtmlTemplateNameWithoutExtension);
 
             builder.HtmlBody = this.mustacheReplacement.ReplaceVariablesInTemplate(values, path);
 
@@ -74,12 +74,14 @@ namespace WebApi.Services
             }
 
             var files = Directory.GetFiles(pathWhereTemplateAre, "*.html").ToList();
+
             if(!files.Any())
             {
                 throw new FileNotFoundException($"Not found any html templates in path: {pathWhereTemplateAre}");
             }
 
-            return files.Any(_ => Path.GetFileNameWithoutExtension(_).Equals(templateName, StringComparison.OrdinalIgnoreCase));
+            return files.Any(_ => Path.GetFileNameWithoutExtension(_)
+                .Equals(CheckHtmlTemplateName(templateName), StringComparison.OrdinalIgnoreCase));
         }
 
         
