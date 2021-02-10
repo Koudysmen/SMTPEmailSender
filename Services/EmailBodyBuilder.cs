@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using SMTPEmailSender.Model;
 using SMTPEmailSender.Services;
@@ -14,10 +15,13 @@ namespace WebApi.Services
     {
         private readonly IMustacheReplacement mustacheReplacement;
         private static readonly string folderBreaker = "/";
+        private readonly string pathToFolderWhereTemplateAre;
 
-        public EmailBodyBuilder(IMustacheReplacement mustacheReplacement)
+        public EmailBodyBuilder(IMustacheReplacement mustacheReplacement, IConfiguration configuration)
         {
             this.mustacheReplacement = mustacheReplacement;
+            this.pathToFolderWhereTemplateAre = configuration.GetValue<string>("EmailClient:PathToFolderWhereTemplateAre") 
+                                                ?? throw new NullReferenceException("Missing PathToFolderWhereTemplateAre env variable in EmailClient section");
         }
 
 
@@ -29,16 +33,16 @@ namespace WebApi.Services
             message.Subject = emailSettings.Subject;
             var builder = new BodyBuilder();
 
-            var findEmailTemplate = this.ExistTemplate(emailSettings.PathToFolderWhereTemplateAre,
+            var findEmailTemplate = this.ExistTemplate(pathToFolderWhereTemplateAre,
                 emailSettings.HtmlTemplateNameWithoutExtension);
 
             if(!findEmailTemplate)
             {
                 throw new KeyNotFoundException
-                    ($"Template '{emailSettings.HtmlTemplateNameWithoutExtension}' not found in path {emailSettings.PathToFolderWhereTemplateAre}");
+                    ($"Template '{emailSettings.HtmlTemplateNameWithoutExtension}' not found in path {pathToFolderWhereTemplateAre}");
             }
 
-            string path = this.CreateAbsoluteTemplatePath(emailSettings.PathToFolderWhereTemplateAre, emailSettings.HtmlTemplateNameWithoutExtension);
+            string path = this.CreateAbsoluteTemplatePath(pathToFolderWhereTemplateAre, emailSettings.HtmlTemplateNameWithoutExtension);
 
             builder.HtmlBody = this.mustacheReplacement.ReplaceVariablesInTemplate(values, path);
 

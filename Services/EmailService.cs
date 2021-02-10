@@ -20,11 +20,11 @@ namespace WebApi.Services
 
         public EmailService(IConfiguration configuration, IEmailBodyBuilder emailBodyBuilder)
         {
-            this.smtpHost = configuration.GetValue<string>("Host") ?? throw new NullReferenceException("SMTP server cannot be null");
-            this.username = configuration.GetValue<string>("Username") ?? throw new NullReferenceException("SMTP username cannot be null");
-            this.password = configuration.GetValue<string>("Password") ?? throw new NullReferenceException("Password cannot be null");
-            this.port = configuration.GetValue<int>("Port", 25);
-            this.useSsl = configuration.GetValue<bool>("UseSsl", false);
+            this.smtpHost = configuration.GetValue<string>("EmailClient:Host") ?? throw new NullReferenceException("SMTP server cannot be null");
+            this.username = configuration.GetValue<string>("EmailClient:Username") ?? throw new NullReferenceException("SMTP username cannot be null");
+            this.password = configuration.GetValue<string>("EmailClient:Password") ?? throw new NullReferenceException("Password cannot be null");
+            this.port = configuration.GetValue<int>("EmailClient:Port", 25);
+            this.useSsl = configuration.GetValue<bool>("EmailClient:UseSsl", false);
             this.emailBodyBuilder = emailBodyBuilder;
         }
 

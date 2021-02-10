@@ -20,5 +20,8 @@ namespace SMTPEmailSender.Model
         public string Password { get; set; }
 
         public bool UseSsl { get; set; } = true;
+
+        [Required(ErrorMessage = "{0} cannot be null")]
+        public string PathToFolderWhereTemplateAre { get; set; }
     }
 }

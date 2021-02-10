@@ -24,7 +24,5 @@ namespace SMTPEmailSender.Model
         [Required(ErrorMessage = "{0} cannot be null")]
         public string HtmlTemplateNameWithoutExtension { get; set; }
 
-        [Required(ErrorMessage = "{0} cannot be null")]
-        public string PathToFolderWhereTemplateAre { get; set; }
     }
 }
